@@ -1,0 +1,58 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: cropmarket-mongo
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - cropmarket-network
+
+  backend:
+    build:
+      context: ./cropmarketbackend
+      dockerfile: Dockerfile
+    image: cropmarket-backend
+    container_name: cropmarket-backend
+    restart: always
+    volumes:
+      - ./cropmarketbackend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5000:5000"
+    env_file: ./cropmarketbackend/.env
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/CropMarket
+    depends_on:
+      - mongo
+    networks:
+      - cropmarket-network
+    command: node server.js  
+
+  frontend:
+    build:
+      context: ./cropmarketfrontend
+      dockerfile: Dockerfile
+    image: cropmarket-frontend
+    container_name: cropmarket-frontend
+    restart: always
+    volumes:
+      - ./cropmarketfrontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - cropmarket-network
+    command: npm run dev
+
+networks:
+  cropmarket-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
