@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [form, setForm] = useState({ email: '', password: '' });
 
   const handleChange = e => {
@@ -14,9 +17,12 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', form);
-      localStorage.setItem('token', res.data.token);
+      // backend returns token, name, district
+      const token = res.data.token;
+      const name = res.data.name;
+      login({ token, name }); // updates state & localStorage via context
       alert('Login successful');
-        navigate('/');
+      navigate('/');
     } catch (err) {
       alert(err.response?.data?.message || 'Login failed');
     }
