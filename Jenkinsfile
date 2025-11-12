@@ -10,25 +10,25 @@ pipeline {
 
     stage('Build Docker Images') {
       steps {
-        sh 'docker compose build'
+        sh 'sudo docker compose build'
       }
     }
 
     stage('Run Containers') {
       steps {
-        sh 'docker compose up -d'
+        sh 'sudo docker compose up -d'
       }
     }
 
     stage('Test') {
       steps {
-        sh 'docker ps' // optional: you can add API test scripts here
+        sh 'sudo docker ps' // optional: you can add API test scripts here
       }
     }
 
     stage('Cleanup') {
       steps {
-        sh 'docker compose down'
+        sh 'sudo docker compose down'
       }
     }
   }
