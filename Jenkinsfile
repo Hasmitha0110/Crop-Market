@@ -20,10 +20,19 @@ pipeline {
       }
     }
 
-    stage('push images to the Docker Hub') {
+    stage('Push images to Docker Hub') {
       steps {
-        sh 'docker build -t gunarathnegdh/cropmarket-frontend:latest https://github.com/Hasmitha0110/Crop-Market.git#main:cropmarketfrontend'
-        sh 'docker build -t gunarathnegdh/cropmarket-backend:latest https://github.com/Hasmitha0110/Crop-Market.git#main:cropmarketbackend'
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+          sh '''
+            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+            
+            docker build -t $DOCKER_USER/cropmarket-frontend:latest ./cropmarketfrontend
+            docker push $DOCKER_USER/cropmarket-frontend:latest
+
+            docker build -t $DOCKER_USER/cropmarket-backend:latest ./cropmarketbackend
+            docker push $DOCKER_USER/cropmarket-backend:latest
+          '''
+        }
       }
     }
 
