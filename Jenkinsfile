@@ -20,9 +20,16 @@ pipeline {
       }
     }
 
+    stage('push images to the Docker Hub') {
+      steps {
+        sh 'docker build -t gunarathnegdh/cropmarket-frontend:latest https://github.com/Hasmitha0110/Crop-Market.git#main:cropmarketfrontend'
+        sh 'docker build -t gunarathnegdh/cropmarket-backend:latest https://github.com/Hasmitha0110/Crop-Market.git#main:cropmarketbackend'
+      }
+    }
+
     stage('Test') {
       steps {
-        sh 'docker ps' // optional: you can add API test scripts here
+        sh 'docker ps'
       }
     }
 
