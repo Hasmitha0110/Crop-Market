@@ -31,6 +31,8 @@ pipeline {
 
     stage('Run Containers') {
       steps {
+        // Stop any existing containers to avoid name conflicts
+        sh 'docker compose down || true'
         sh 'docker compose up -d'
       }
     }
