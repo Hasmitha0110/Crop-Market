@@ -8,6 +8,18 @@ pipeline {
       }
     }
 
+    stage('Terraform Init & Apply') {
+      steps {
+        dir('terraform') {
+          sh 'terraform init'
+          sh 'terraform validate'
+          sh 'terraform plan -out=tfplan'
+          // Using -auto-approve for automation. In production, you might want a manual approval step.
+          sh 'terraform apply -auto-approve tfplan'
+        }
+      }
+    }
+
     stage('Build Docker Images') {
       steps {
         sh 'docker compose build'
@@ -36,6 +48,33 @@ pipeline {
       }
     }
 
+    stage('Deploy to EC2') {
+      steps {
+        dir('terraform') {
+          script {
+             // 1. Get Public IP from Terraform Output
+             def serverIp = sh(script: 'terraform output -raw instance_public_ip', returnStdout: true).trim()
+             echo "Deploying to server: ${serverIp}"
+             
+             // 2. SSH and Deploy using 'ec2-key' credential
+             sshagent(['ec2-key']) {
+                // Copy the production docker-compose file to the server
+                sh "scp -o StrictHostKeyChecking=no ../docker-compose.ec2.yml ec2-user@${serverIp}:/home/ec2-user/docker-compose.yml"
+                
+                // Remote execute commands: pull new images and restart
+                sh """
+                    ssh -o StrictHostKeyChecking=no ec2-user@${serverIp} '
+                        docker-compose pull
+                        docker-compose up -d
+                        docker system prune -f
+                    '
+                """
+             }
+          }
+        }
+      }
+    }
+
     stage('Test') {
       steps {
         sh 'docker ps'
@@ -54,7 +93,7 @@ pipeline {
       echo '❌ Build or test failed!'
     }
     success {
-      echo '✅ CropMarket build and deploy succeeded!'
+      echo '✅ CropMarket build, infra provision, and deploy succeeded!'
     }
   }
 }

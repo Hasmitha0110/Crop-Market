@@ -1,0 +1,41 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: cropmarket-mongo
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - cropmarket-network
+
+  backend:
+    image: gunarathnegdh/cropmarket-backend:latest
+    container_name: cropmarket-backend
+    restart: always
+    ports:
+      - "8080:5000" # Mapped to 8080 to match Security Group
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongo:27017/CropMarket
+    depends_on:
+      - mongo
+    networks:
+      - cropmarket-network
+
+  frontend:
+    image: gunarathnegdh/cropmarket-frontend:latest
+    container_name: cropmarket-frontend
+    restart: always
+    ports:
+      - "3000:5173" # Mapped to 3000 to match Security Group
+    depends_on:
+      - backend
+    networks:
+      - cropmarket-network
+
+networks:
+  cropmarket-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
