@@ -61,14 +61,17 @@ pipeline {
              def serverIp = sh(script: 'terraform output -raw instance_public_ip', returnStdout: true).trim()
              echo "Deploying to server: ${serverIp}"
              
-             // 2. SSH and Deploy using 'ec2-key' credential
-             sshagent(['ec2-key']) {
+             // 2. SSH and Deploy using 'ec2-key' credential (using withCredentials to avoid sshagent plugin dependency)
+             withCredentials([sshUserPrivateKey(credentialsId: 'ec2-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+                // Fix permissions for the key file (Jenkins sometimes makes it too open)
+                sh 'chmod 600 $SSH_KEY'
+
                 // Copy the production docker-compose file to the server
-                sh "scp -o StrictHostKeyChecking=no ../docker-compose.ec2.yml ec2-user@${serverIp}:/home/ec2-user/docker-compose.yml"
+                sh "scp -o StrictHostKeyChecking=no -i $SSH_KEY ../docker-compose.ec2.yml ec2-user@${serverIp}:/home/ec2-user/docker-compose.yml"
                 
                 // Remote execute commands: pull new images and restart
                 sh """
-                    ssh -o StrictHostKeyChecking=no ec2-user@${serverIp} '
+                    ssh -o StrictHostKeyChecking=no -i $SSH_KEY ec2-user@${serverIp} '
                         docker-compose pull
                         docker-compose up -d
                         docker system prune -f
