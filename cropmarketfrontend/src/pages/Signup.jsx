@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 
 
 export default function Signup() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '', contact: '', nic: '', district: '', email: '', password: ''
   });
@@ -16,7 +16,7 @@ export default function Signup() {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/signup', form);
+      await api.post('/auth/signup', form);
       alert('Admin registered successfully');
       navigate('/login');
     } catch (err) {
