@@ -11,11 +11,14 @@ pipeline {
     stage('Terraform Init & Apply') {
       steps {
         dir('terraform') {
-          sh 'terraform init'
-          sh 'terraform validate'
-          sh 'terraform plan -out=tfplan'
-          // Using -auto-approve for automation. In production, you might want a manual approval step.
-          sh 'terraform apply -auto-approve tfplan'
+          // Bind AWS Credentials to Environment Variables
+          withCredentials([usernamePassword(credentialsId: 'aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+             sh 'terraform init'
+             sh 'terraform validate'
+             sh 'terraform plan -out=tfplan'
+             // Using -auto-approve for automation.
+             sh 'terraform apply -auto-approve tfplan'
+          }
         }
       }
     }
