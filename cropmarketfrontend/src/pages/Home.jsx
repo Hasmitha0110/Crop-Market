@@ -13,7 +13,7 @@ const Home = () => {
         <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1470&auto=format&fit=crop')] bg-cover bg-center"></div>
         <div className="relative max-w-7xl mx-auto px-4 py-24 sm:py-32 flex flex-col items-center text-center">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
-            Fresh Crops, <br className="hidden md:block" /> Directly from Farmers
+            Hasmitha Gunarathne<br className="hidden md:block" /> .
           </h1>
           <p className="text-lg md:text-xl text-green-100 max-w-2xl mb-10">
             Connect directly with local farmers to buy fresh, organic, and high-quality produce.
