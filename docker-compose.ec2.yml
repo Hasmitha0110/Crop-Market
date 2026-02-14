@@ -17,6 +17,7 @@ services:
     environment:
       - NODE_ENV=production
       - MONGO_URI=mongodb://mongo:27017/CropMarket
+      - JWT_SECRET=yourSuperSecretKey
     depends_on:
       - mongo
     networks:
