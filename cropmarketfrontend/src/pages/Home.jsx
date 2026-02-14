@@ -17,7 +17,7 @@ const Home = () => {
           </h1>
           <p className="text-lg md:text-xl text-green-100 max-w-2xl mb-10">
             Connect directly with local farmers to buy fresh, organic, and high-quality produce.
-            Fair prices for farmers, fresh food for you.
+            Fair prices for farmers, fresh food for you. Let's connect and grow together.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">

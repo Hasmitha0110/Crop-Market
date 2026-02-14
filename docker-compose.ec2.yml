@@ -13,7 +13,7 @@ services:
     container_name: cropmarket-backend
     restart: always
     ports:
-      - "8080:5000" # Mapped to 8080 to match Security Group
+      - "8080:5000" 
     environment:
       - NODE_ENV=production
       - MONGO_URI=mongodb://mongo:27017/CropMarket
@@ -27,7 +27,7 @@ services:
     container_name: cropmarket-frontend
     restart: always
     ports:
-      - "3000:5173" # Mapped to 3000 to match Security Group
+      - "3000:5173" 
     depends_on:
       - backend
     networks:
