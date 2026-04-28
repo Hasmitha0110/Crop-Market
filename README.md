@@ -32,25 +32,22 @@ This project leverages the **MERN** stack along with modern DevOps tools.
 
 ## 📸 Screenshots & Architecture
 
-> **Note to Developer:** Please add your images to the repository (e.g., in an `images/` or `assets/` folder) and update the image paths below.
 
 ### 🖥️ Frontend Preview
 *The frontend provides a clean, responsive, and intuitive user interface for users to interact with the Crop Market.*
 
-![Frontend Screenshot](./path/to/frontend-image.png)
-*(Replace `./path/to/frontend-image.png` with the actual path to your frontend image)*
+![Frontend Screenshot - Home](./SS/Home.png)
+![Frontend Screenshot - Dashboard](./SS/Dashbord.png)
 
 ### ⚙️ CI/CD Pipeline
 *Our automated Jenkins pipeline handles the building, testing, and deployment of the application seamlessly.*
 
-![Jenkins Pipeline](./path/to/pipeline-image.png)
-*(Replace `./path/to/pipeline-image.png` with the actual path to your pipeline image)*
+![Jenkins Pipeline](./SS/jenkins.png)
 
 ### ☁️ AWS Deployment (EC2)
 *The application and its containers are hosted on AWS EC2 instances, provisioned automatically using Terraform.*
 
-![AWS Instance](./path/to/aws-instance-image.png)
-*(Replace `./path/to/aws-instance-image.png` with the actual path to your AWS instance image)*
+![AWS Instance](./SS/aws.png)
 
 ---
 
