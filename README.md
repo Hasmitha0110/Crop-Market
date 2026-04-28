@@ -51,16 +51,3 @@ This project leverages the **MERN** stack along with modern DevOps tools.
 
 ---
 
-## 🚦 Running the Application Locally
-
-1. **Clone the repository:**
-   ```bash
-   git clone <your-repo-url>
-   cd CropMarket
-   ```
-
-2. **Start with Docker Compose:**
-   ```bash
-   docker-compose up --build
-   ```
-   This will spin up the backend and frontend services.
